@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Пивной календарь"><link rel="manifest" href="manifest.webmanifest">
+<title>Когда пьём с Рафом?</title>
+<style>
+:root{--bg:#07110b;--card:#101a12;--line:#29382c;--text:#f5f3e9;--muted:#9fa99f;--green:#16c968;--yellow:#ffc52c;--red:#ff5656}
+*{box-sizing:border-box}body{margin:0;padding-bottom:env(safe-area-inset-bottom);background:radial-gradient(circle at top,#193a20,#07110b 50%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,sans-serif}.app{max-width:520px;margin:auto;padding:calc(12px + env(safe-area-inset-top)) 14px calc(40px + env(safe-area-inset-bottom));}.top{display:flex;justify-content:space-between;align-items:center;padding:8px 3px 16px}.logo{font-weight:900}.logo span{color:var(--yellow)}.pill{border:1px solid var(--line);padding:7px 10px;border-radius:99px;font-size:11px;color:var(--muted)}
+.hero{min-height:390px;border:1px solid #304334;border-radius:28px;overflow:hidden;position:relative;background:url("assets/me.jpg") center/cover}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#07110b,rgba(7,17,11,.15) 65%,rgba(7,17,11,.1))}.heroText{position:absolute;z-index:1;bottom:0;padding:25px}.hero h1{font-size:46px;line-height:.93;letter-spacing:-.06em;margin:8px 0}.hero h1 span{color:var(--yellow)}.hero p{color:#e1e5df;line-height:1.4}.card{background:linear-gradient(145deg,#111c13,#0b130e);border:1px solid var(--line);border-radius:23px;padding:17px;margin-top:15px}.card h2{margin:0 0 5px}.sub{color:var(--muted);font-size:13px;line-height:1.45;margin:0 0 14px}.month{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.nav{background:#111b14;border:1px solid var(--line);color:white;border-radius:10px;width:35px;height:35px;font-size:20px}.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.dow{font-size:10px;color:#6e796f;text-align:center}.day{aspect-ratio:1;min-height:42px;border:1px solid #253228;background:#101811;color:white;border-radius:11px;font-weight:800}.day.selected{background:var(--green);color:#041008;border-color:var(--green)}.day.other{visibility:hidden}.drinks{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}.drink{min-height:78px;background:#101811;border:1px solid var(--line);border-radius:14px;color:white;font-weight:800}.drink.active{border-color:var(--green);background:#12311d}.btn{width:100%;border:0;min-height:52px;border-radius:14px;padding:14px;font-weight:900;margin-top:8px}.primary{background:var(--green);color:#031008}.yellow{background:var(--yellow);color:#171306}.dark{background:#18221b;color:white;border:1px solid var(--line)}.profile{display:flex;gap:11px;align-items:center}.avatar{width:52px;height:52px;border-radius:50%;object-fit:cover}.status{padding:12px;border:1px solid var(--line);border-radius:14px;margin-top:12px;color:#dce3dc;font-size:13px}.result{display:none;padding:0;overflow:hidden}.result.show{display:block}.resultImg{height:245px;background-size:cover;background-position:center}.resultBody{padding:17px}.result h2{font-size:30px;line-height:1;margin:0 0 8px}.match h2{color:#45ed93}.mismatch h2{color:#ff6969}.beer{display:flex;gap:12px;align-items:center;border:1px solid #334635;border-radius:16px;padding:10px;margin-top:14px}.beer img{width:65px;height:90px;object-fit:contain}.beer b{font-size:17px}.footer{text-align:center;color:#667167;font-size:11px;margin-top:18px}.toast{position:fixed;left:50%;bottom:18px;transform:translate(-50%,20px);opacity:0;background:#f4f2e8;color:#07110b;padding:11px 15px;border-radius:13px;font-weight:800;transition:.25s;z-index:9}.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* --- subtle mobile animations --- */
+@keyframes riseIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 0 rgba(22,201,104,0)}50%{box-shadow:0 0 28px rgba(22,201,104,.22)}}
+@keyframes beerFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-7px) rotate(1deg)}}
+@keyframes pop{0%{transform:scale(.88);opacity:0}65%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}@keyframes beerFly{0%{opacity:0;transform:translate(-50%,10px) scale(.5) rotate(-15deg)}35%{opacity:1;transform:translate(-50%,-8px) scale(1.08) rotate(6deg)}100%{opacity:0;transform:translate(-50%,-58px) scale(.9) rotate(-3deg)}}@keyframes dateRing{0%{box-shadow:0 0 0 0 rgba(22,201,104,.55)}100%{box-shadow:0 0 0 18px rgba(22,201,104,0)}}
+@keyframes confetti{0%{transform:translateY(-15px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(110px) rotate(240deg);opacity:0}}
+.hero{animation:riseIn .7s ease both}
+.card{animation:riseIn .55s ease both}
+.card:nth-of-type(2){animation-delay:.08s}.card:nth-of-type(3){animation-delay:.16s}.card:nth-of-type(4){animation-delay:.24s}
+.btn,.drink,.nav,.day{transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,background .16s ease}
+.btn:active,.drink:active,.nav:active{transform:scale(.96)}
+.day:hover{transform:translateY(-2px)}
+.day.selected{animation:pop .22s ease both}.date-picked{animation:dateRing .55s ease-out both}.beer-fly{position:fixed;z-index:30;pointer-events:none;font-size:25px;animation:beerFly 1s ease-out forwards}
+.primary{animation:glowPulse 2.5s ease-in-out infinite}
+.beer img{animation:beerFloat 3s ease-in-out infinite}
+.result.show{animation:pop .42s cubic-bezier(.2,.8,.2,1) both}
+.result.show .resultImg{animation:riseIn .45s ease both}
+.result.show .beer{animation:riseIn .5s .12s ease both}
+.result.show .yellow{animation:riseIn .5s .2s ease both}
+.confetti{position:fixed;top:-15px;width:7px;height:12px;border-radius:2px;pointer-events:none;z-index:20;animation:confetti 1.7s ease-out forwards}
+@media(prefers-reduced-motion:reduce){
+*{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body><div class="app">
+<header class="top"><div class="logo">ПИВНОЙ <span>КАЛЕНДАРЬ</span></div><div><span class="pill" id="who">Илья</span><button id="installBtn" class="pill" style="display:none;margin-left:5px;background:#162219;color:#fff;border:1px solid #29382c">＋ На экран</button></div></header>
+<section class="hero"><div class="heroText"><div>ОПЕРАЦИЯ «ПОСИДЕЛКИ»</div><h1>Когда пьём<br><span>с Рафом?</span></h1><p>Илья выбирает дату и напиток. Раф выбирает свои. Сайт сам сравнит ответы.</p></div></section>
+
+<section class="card" id="choose"><h2 id="chooseTitle">Выбери свою дату</h2><p class="sub">Выберите день встречи и то, что будете пить.</p>
+<div class="month"><button class="nav" onclick="moveMonth(-1)">‹</button><b id="month"></b><button class="nav" onclick="moveMonth(1)">›</button></div>
+<div class="grid" id="cal"></div>
+<div class="drinks">
+<button class="drink active" data-drink="beer" onclick="drink(this)">🍺<br>Пиво</button>
+<button class="drink" data-drink="whiskey" onclick="drink(this)">🥃<br>Виски</button>
+<button class="drink" data-drink="tea" onclick="drink(this)">☕<br>Бергамот</button>
+</div>
+<div class="status" id="status">Дата ещё не выбрана</div>
+<button class="btn primary" id="saveBtn" onclick="saveChoice()">Сохранить выбор</button>
+</section>
+
+<section class="card"><div class="profile"><img class="avatar" src="assets/raf.jpg"><div><b>Раф</b><div class="sub" style="margin:2px 0 0">vk.ru/kalmasov</div></div></div>
+<button class="btn dark" onclick="makeInvite()">📤 Скопировать личную ссылку Рафу</button><div id="inviteBox" style="display:none;margin-top:9px"><input id="inviteLink" readonly style="width:100%;padding:12px;border-radius:12px;border:1px solid #29382c;background:#0a120c;color:#dfe7df"><button class="btn yellow" onclick="copyLink()">Скопировать ещё раз</button></div>
+<a class="btn dark" style="display:block;text-align:center;text-decoration:none" href="https://vk.ru/kalmasov" target="_blank">Открыть профиль Рафа</a>
+</section>
+
+<section class="card result" id="result"><div class="resultImg" id="resultImg"></div><div class="resultBody"><h2 id="resultTitle"></h2><p class="sub" id="resultText"></p><div class="beer"><img src="assets/beer.jpg"><div><b id="drinkName">Хадыженское 🍺</b><br><span class="sub" id="drinkText">Любимый вариант.</span></div></div><button class="btn yellow" onclick="copyResult()">↗ Скопировать результат</button></div></section>
+<section class="card"><b>Участники</b><p class="sub">Илья · <a href="https://vk.ru/pedon666" target="_blank" style="color:#71efa6">vk.ru/pedon666</a><br>Раф · <a href="https://vk.ru/kalmasov" target="_blank" style="color:#71efa6">vk.ru/kalmasov</a></p></section>
+<div class="footer">Пивной календарь · шуточный проект · v2</div>
+</div><div class="toast" id="toast"></div>
+<script>
+let view=new Date();view.setDate(1);
+let selected=null,selectedDrink='beer';
+const names=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const drinks={
+  beer:['Хадыженское 🍺','Тот самый вариант для встречи.'],
+  whiskey:['Виски 🥃','Вариант для серьёзных переговоров.'],
+  tea:['Чай с бергамотом ☕','Если сегодня хочется без алкоголя.']
+};
+const qs=new URLSearchParams(location.search);
+const role=qs.get('role')||'ilya';
+const inviteDate=qs.get('date');
+const inviteDrink=qs.get('drink');
+document.getElementById('who').textContent=role==='raf'?'Раф':'Илья';
+if(role==='raf'){
+  document.getElementById('chooseTitle').textContent='Раф, выбери свою дату';
+  document.getElementById('saveBtn').textContent='🍺 Ответить Илье';
+}
+
+function toast(s){let t=document.getElementById('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function dateText(s){return new Date(s+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'})}
+function render(){
+  document.getElementById('month').textContent=names[view.getMonth()]+' '+view.getFullYear();
+  let c=document.getElementById('cal');c.innerHTML='';
+  ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(x=>{let e=document.createElement('div');e.className='dow';e.textContent=x;c.append(e)});
+  let start=(new Date(view.getFullYear(),view.getMonth(),1).getDay()+6)%7;
+  for(let i=0;i<start;i++){let e=document.createElement('div');e.className='day other';c.append(e)}
+  let n=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();
+  for(let d=1;d<=n;d++){
+    let key=`${view.getFullYear()}-${String(view.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    let e=document.createElement('button');e.className='day'+(selected===key?' selected':'');e.textContent=d;
+    e.onclick=()=>{selected=key;document.getElementById('status').textContent='Выбрано: '+dateText(key);datePicked(e,key);render()};
+    c.append(e);
+  }
+}
+function moveMonth(x){view.setMonth(view.getMonth()+x);render()}
+function drink(el){
+  document.querySelectorAll('.drink').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');selectedDrink=el.dataset.drink;
+  toast('Выбрано: '+drinks[selectedDrink][0]);
+}
+function datePicked(el,key){
+  el.classList.remove('date-picked');void el.offsetWidth;el.classList.add('date-picked');
+  const b=document.createElement('div');b.className='beer-fly';b.textContent='🍺';
+  const r=el.getBoundingClientRect();b.style.left=(r.left+r.width/2)+'px';b.style.top=(r.top+window.scrollY)+'px';
+  document.body.appendChild(b);setTimeout(()=>b.remove(),1050);
+  toast('Дата забронирована для важных переговоров 😎');
+}
+function makeInvite(){
+  if(!selected)return toast('Сначала выбери дату 🍺');
+  const url=new URL(location.href);
+  url.search='';
+  url.searchParams.set('role','raf');
+  url.searchParams.set('date',selected);
+  url.searchParams.set('drink',selectedDrink);
+  navigator.clipboard?.writeText(url.toString());
+  toast('Ссылка Рафу скопирована 📤');
+  document.getElementById('inviteBox').style.display='block';
+  document.getElementById('inviteLink').value=url.toString();
+}
+function saveChoice(){
+  if(!selected)return toast('Сначала выбери дату 🍺');
+  if(role==='ilya'){
+    localStorage.setItem('myChoice',JSON.stringify({date:selected,drink:selectedDrink}));
+    makeInvite();
+  }else{
+    if(!inviteDate||!inviteDrink)return toast('В этой ссылке нет выбора Ильи');
+    const raf={date:selected,drink:selectedDrink};
+    const same=raf.date===inviteDate && raf.drink===inviteDrink;
+    showResult(
+      same?'СОВПАДЕНИЕ! 🎉':'МНЕНИЯ РАЗДЕЛИЛИСЬ 💔',
+      same
+        ? `Вы оба выбрали ${dateText(inviteDate)} и ${drinks[inviteDrink][0]}.`
+        : `Илья: ${dateText(inviteDate)} · ${drinks[inviteDrink][0]} | Раф: ${dateText(raf.date)} · ${drinks[raf.drink][0]}.`,
+      same
+    );
+    // Create a result link containing both choices so Ilya can open the exact result.
+    const u=new URL(location.href);u.search='';
+    u.searchParams.set('result','1');
+    u.searchParams.set('idate',inviteDate);u.searchParams.set('idrank',inviteDrink);
+    u.searchParams.set('rdate',raf.date);u.searchParams.set('rdrink',raf.drink);
+    navigator.clipboard?.writeText(u.toString());
+    toast('Результат сформирован — ссылка скопирована');
+  }
+}
+function showResult(title,text,same){
+  let res=document.getElementById('result');
+  res.classList.add('show',same?'match':'mismatch');res.classList.remove(same?'mismatch':'match');
+  document.getElementById('resultImg').style.backgroundImage=`url("assets/${same?'match.jpg':'me.jpg'}")`;
+  document.getElementById('resultTitle').textContent=title;
+  document.getElementById('resultText').textContent=text;
+  const key=same?(qs.get('idrank')||inviteDrink||selectedDrink):'beer';
+  document.getElementById('drinkName').textContent=drinks[key][0];
+  document.getElementById('drinkText').textContent=drinks[key][1];
+  res.scrollIntoView({behavior:'smooth',block:'center'});
+  if(same)celebration();
+}
+function celebration(){
+  for(let i=0;i<28;i++){
+    let e=document.createElement('i');e.className='confetti';e.textContent='🍺';
+    e.style.left=Math.random()*100+'vw';e.style.animationDelay=(Math.random()*.45)+'s';
+    document.body.appendChild(e);setTimeout(()=>e.remove(),2300);
+  }
+}
+function copyResult(){navigator.clipboard?.writeText(location.href);toast('Ссылка на результат скопирована')}
+function copyLink(){navigator.clipboard?.writeText(document.getElementById('inviteLink').value);toast('Ссылка скопирована')}
+render();
+
+if(role==='raf' && inviteDate){
+  document.getElementById('status').textContent=`Илья предлагает: ${dateText(inviteDate)} · ${drinks[inviteDrink]?.[0]||'напиток не указан'}`;
+  if(inviteDrink){
+    selectedDrink=inviteDrink;
+    document.querySelectorAll('.drink').forEach(x=>x.classList.toggle('active',x.dataset.drink===selectedDrink));
+  }
+}
+if(qs.get('result')==='1' && qs.get('idate') && qs.get('rdate')){
+  const same=qs.get('idate')===qs.get('rdate') && qs.get('idrank')===qs.get('rdrink');
+  showResult(
+    same?'СОВПАДЕНИЕ! 🎉':'МНЕНИЯ РАЗДЕЛИЛИСЬ 💔',
+    same
+      ? `Илья и Раф выбрали ${dateText(qs.get('idate'))} и ${drinks[qs.get('idrank')][0]}.`
+      : `Илья: ${dateText(qs.get('idate'))} · ${drinks[qs.get('idrank')][0]} | Раф: ${dateText(qs.get('rdate'))} · ${drinks[qs.get('rdrink')]?.[0]||drinks[qs.get('rdrink')]?.[0]}.`,
+    same
+  );
+}
+</script></body></html>

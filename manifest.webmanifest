@@ -1,0 +1,10 @@
+{
+  "name": "Когда пьём с Рафом?",
+  "short_name": "Пивной календарь",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#07110b",
+  "theme_color": "#07110b",
+  "lang": "ru",
+  "icons": []
+}
